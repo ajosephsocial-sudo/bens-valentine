@@ -382,9 +382,24 @@
     });
 
     noBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-    });
+  e.preventDefault();
+  e.stopPropagation();
+
+  const container = document.querySelector('.container');
+  const containerRect = container.getBoundingClientRect();
+  const btnRect = noBtn.getBoundingClientRect();
+
+  const maxX = containerRect.width - btnRect.width - 20;
+  const maxY = containerRect.height - btnRect.height - 20;
+
+  const randomX = Math.random() * maxX;
+  const randomY = Math.random() * maxY;
+
+  noBtn.style.position = 'absolute';
+  noBtn.style.left = randomX + 'px';
+  noBtn.style.top = randomY + 'px';
+});
+
 
     backBtn.addEventListener('click', () => {
       successScreen.classList.remove('show');
