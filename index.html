@@ -153,9 +153,6 @@
       transition: left 0.15s ease-out, top 0.15s ease-out;
       pointer-events: none;
       cursor: default;
-      transition: transform 0.2s ease, left 0.3s ease, top 0.3s ease;
-}
-
     }
 
     .success-screen {
@@ -328,7 +325,30 @@
     const ESCAPE_ZONE = 180;
     const MAX_OFFSET = 400;
 
-    
+    document.addEventListener('mousemove', (e) => {
+      const rect = noBtn.getBoundingClientRect();
+      const btnCenterX = rect.left + rect.width / 2;
+      const btnCenterY = rect.top + rect.height / 2;
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+
+      const distance = Math.hypot(mouseX - btnCenterX, mouseY - btnCenterY);
+      if (distance < ESCAPE_ZONE) {
+        // Angle FROM cursor TO button = direction to move button away from cursor
+        const angle = Math.atan2(btnCenterY - mouseY, btnCenterX - mouseX);
+        const newX = Math.cos(angle) * RUN_DISTANCE;
+        const newY = Math.sin(angle) * RUN_DISTANCE;
+
+        let left = parseFloat(noBtn.style.left || 0) + newX;
+        let top = parseFloat(noBtn.style.top || 0) + newY;
+
+        left = Math.max(-MAX_OFFSET, Math.min(MAX_OFFSET, left));
+        top = Math.max(-MAX_OFFSET, Math.min(MAX_OFFSET, top));
+
+        noBtn.style.left = left + 'px';
+        noBtn.style.top = top + 'px';
+      }
+    });
 
     function positionCollage() {
   const gallery = document.getElementById('successGallery');
@@ -362,24 +382,9 @@
     });
 
     noBtn.addEventListener('click', (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-
-  const container = document.querySelector('.container');
-  const containerRect = container.getBoundingClientRect();
-  const btnRect = noBtn.getBoundingClientRect();
-
-  const maxX = containerRect.width - btnRect.width - 20;
-  const maxY = containerRect.height - btnRect.height - 20;
-
-  const randomX = Math.random() * maxX;
-  const randomY = Math.random() * maxY;
-
-  noBtn.style.position = 'absolute';
-  noBtn.style.left = randomX + 'px';
-  noBtn.style.top = randomY + 'px';
-});
-
+      e.preventDefault();
+      e.stopPropagation();
+    });
 
     backBtn.addEventListener('click', () => {
       successScreen.classList.remove('show');
