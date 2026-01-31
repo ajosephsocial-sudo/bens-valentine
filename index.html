@@ -214,6 +214,15 @@
 .success-gallery .success-image:hover {
   transform: scale(1.05) rotate(var(--rot));
 }
+/* Enable free scrolling on small screens */
+@media (max-width: 768px) {
+  .success-gallery {
+    max-height: 70vh;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 1.5rem;
+  }
+}
 
 
     .confetti {
